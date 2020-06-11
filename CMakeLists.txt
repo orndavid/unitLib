@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(template VERSION 0.0.1 LANGUAGES CXX )
+project(template VERSION 0.0.1 LANGUAGES CXX DESCRIPTION "A unit conversion library")
 
 set(NAME project)
 # Configure the release by default
@@ -22,25 +22,27 @@ include_directories(debug PUBLIC ${CMAKE_SOURCE_DIR}/inc )
 add_subdirectory(inc)
 add_subdirectory(src)
 
-add_library(unitLib SHARED 
+# Main fuss of the system
+add_library(unitLib SHARED
             ${lib_sources}
             ${lib_headers})
 
-if(${CMAKE_BUILD_TYPE} STREQUAL release) 
+set_target_properties(unitLib PROPERTIES VERSION ${PROJECT_VERSION})
+target_include_directories(unitLib PRIVATE .)
+set_target_properties(unitLib PROPERTIES PUBLIC_HEADER inc/unitLib.h)
+
+if(${CMAKE_BUILD_TYPE} STREQUAL release)
     message("Building in release mode")
     #add_executable()
     # target_compile_options()
-elseif(${CMAKE_BUILD_TYPE} STREQUAL debug) 
+elseif(${CMAKE_BUILD_TYPE} STREQUAL Debug)
     message("Building in debug mode")
     enable_testing()
     include(GoogleTest)
-
-    add_subdirectory(tests)
     message("Found GoogleTests")
-
+    message("Building TESTS")
+    add_subdirectory(tests)
     add_executable(debug ${debug_files} ${lib_headers})
     target_link_libraries(debug PUBLIC unitLib)
     target_compile_options(debug PUBLIC -Wall -ggdb -O0)
 endif()
-
-
