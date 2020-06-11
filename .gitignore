@@ -104,3 +104,8 @@ Sessionx.vim
 tags
 # Persistent undo
 [._]*.un~
+
+# Additional files that should be blocked
+GPATH
+GRTAGS
+GTAGS
