@@ -17,6 +17,7 @@ message("Build type " ${CMAKE_BUILD_TYPE})
 
 # Set library header folder
 include_directories(debug PUBLIC ${CMAKE_SOURCE_DIR}/inc )
+include_directories(debug PUBLIC ${CMAKE_SOURCE_DIR}/src )
 
 # Build the library
 add_subdirectory(inc)
@@ -42,6 +43,8 @@ elseif(${CMAKE_BUILD_TYPE} STREQUAL Debug)
     message("Found GoogleTests")
     message("Building TESTS")
     add_subdirectory(tests)
+
+    # Additional method for debugging during development
     add_executable(debug ${debug_files} ${lib_headers})
     target_link_libraries(debug PUBLIC unitLib)
     target_compile_options(debug PUBLIC -Wall -ggdb -O0)
